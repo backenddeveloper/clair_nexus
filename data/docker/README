@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -e
+set -u
+set -x
+
+###################################################################
+#                                                                 #
+# The Docker repository is made available at `nexus.test`         #
+# The default Nexus logins are `admin:admin123`                   #
+# The CA that signs the server certificate is trusted on this box #
+#                                                                 #
+###################################################################
+
+docker login -u admin -p admin123 nexus.test
+
+#######################################################
+#                                                     #
+# Building and tagging an image for pushing to nexus  #
+#                                                     #
+#######################################################
+
+docker build -t nexus.test/hello /data/hello
+
+###############################
+#                             #
+# Pushing the image to nexus  #
+#                             #
+###############################
+
+docker push nexus.test/hello:latest
+
+########################################################################
+#                                                                      #
+# Removing the local image to later verify that we can pull from nexus #
+#                                                                      #
+########################################################################
+
+docker rmi nexus.test/hello:latest
+
+##############################################################
+#                                                            #
+# Now we use Clairctl (https://github.com/jgsqware/clairctl) #
+# to engage the clair vulnerability scanner                  #
+#                                                            #
+# Pushing the image to Clair for analysis                    #
+#                                                            #
+##############################################################
+
+clairctl push nexus.test/hello:latest
+
+################################
+#                              #
+# Now we can analyse the image #
+#                              #
+################################
+
+clairctl analyse nexus.test/hello:latest
