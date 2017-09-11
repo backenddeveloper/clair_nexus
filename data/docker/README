@@ -55,4 +55,4 @@ clairctl push nexus.test/hello:latest
 #                              #
 ################################
 
-clairctl analyse nexus.test/hello:latest
+clairctl analyze nexus.test/hello:latest
