@@ -68,7 +68,7 @@ docker run -d --name clair -p 6060:6060 -p 6061:6061 --network internal -v /data
 
 wget https://s3.amazonaws.com/clairctl/latest/clairctl-linux-amd64 --quiet
 mv clairctl-linux-amd64 /usr/bin/clairctl
-chmod 777 /usr/bin/clairctl
+chmod 755 /usr/bin/clairctl
 chown vagrant:docker /etc/docker -R
 
 ##################################################################
